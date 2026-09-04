@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Parsing Engine</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #0d1117; color: #c9d1d9; padding: 2rem; line-height: 1.6; }
+        .game-container { max-width: 800px; margin: 0 auto; background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 2rem; }
+        h1, h2, h3 { color: #58a6ff; }
+        .scenario-box { background: #0d1117; padding: 1.5rem; border-left: 4px solid #8b949e; margin-bottom: 2rem; }
+        button { background-color: #238636; color: white; border: 1px solid rgba(240,246,252,0.1); padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        button:hover { background-color: #2ea043; }
+        .hidden { display: none; }
+        .highlight { background-color: rgba(210, 153, 34, 0.4); padding: 2px 4px; border-radius: 3px; font-weight: bold;}
+        select, input { padding: 8px; border-radius: 4px; border: 1px solid #30363d; background: #0d1117; color: #c9d1d9; margin-top: 10px; width: 100%; box-sizing: border-box;}
+        .success { color: #3fb950; font-weight: bold; margin-top: 10px; }
+        .error { color: #f85149; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <h1>The Parsing Engine: Level 1</h1>
+    <p>Run the A.P.E.X sequence to extract the source code from the chaos.</p>
+
+    <!-- Phase 1: Anomaly -->
+    <div id="phase1">
+        <h3>Step 1: Anomaly Detection</h3>
+        <div class="scenario-box">
+            <p id="scenario-text">You are observing a local coffee shop. The owner is stressed. "We have a line out the door every morning," he says, "but at the end of the month, we barely break even on rent." You sit and observe. You notice that 40% of the customers buy a $3 black coffee, open their laptops, and occupy a four-person table for 6 hours while using the free WiFi.</p>
+        </div>
+        <button onclick="runAnomaly()">Scan for Anomaly</button>
+        <p id="anomaly-result" class="hidden"></p>
+    </div>
+
+    <!-- Phase 2: Principle -->
+    <div id="phase2" class="hidden">
+        <h3>Step 2: Principle Decoupling</h3>
+        <p>Strip away the coffee and the laptops. What is the underlying mathematical or behavioral physics happening here?</p>
+        <select id="principle-select">
+            <option value="none">-- Select the core principle --</option>
+            <option value="wrong">Pricing issue: The coffee is too cheap for the local market.</option>
+            <option value="correct">Misaligned Incentive: Customers are paying for a consumable good, but consuming a scarce spatial resource.</option>
+            <option value="wrong">Marketing issue: The shop needs to advertise higher-margin items.</option>
+        </select>
+        <button onclick="checkPrinciple()">Extract Principle</button>
+        <p id="principle-result"></p>
+    </div>
+
+    <!-- Phase 3: Encapsulate -->
+    <div id="phase3" class="hidden">
+        <h3>Step 3: Encapsulation</h3>
+        <p>You must compress this principle into a reusable chunk. Give this pattern a name (e.g., "The Space Arbitrage" or "The Time Tax"):</p>
+        <input type="text" id="pattern-name" placeholder="Name the pattern...">
+        <button onclick="encapsulate()">Save Pattern</button>
+        <p id="encapsulate-result" class="success hidden"></p>
+    </div>
+
+    <!-- Phase 4: Arbitrage -->
+    <div id="phase4" class="hidden">
+        <h3>Step 4: Cross-Domain Arbitrage</h3>
+        <div class="scenario-box">
+            <p><strong>New Scenario:</strong> A popular SaaS software company charges a flat $10/month fee. They are going bankrupt because a small group of "power users" are using the software to process massive amounts of video data, maxing out the company's expensive server costs.</p>
+        </div>
+        <p>How do you apply <strong id="custom-name-display">your pattern</strong> to fix this?</p>
+        <select id="arbitrage-select">
+            <option value="none">-- Select the solution --</option>
+            <option value="wrong">Run marketing ads to get more normal users to balance it out.</option>
+            <option value="correct">Realign the incentive: Switch to usage-based pricing where users pay per gigabyte of server load.</option>
+            <option value="wrong">Ban the power users from the platform.</option>
+        </select>
+        <button onclick="checkArbitrage()">Execute Arbitrage</button>
+        <p id="arbitrage-result"></p>
+    </div>
+
+</div>
+
+<script>
+    function runAnomaly() {
+        const text = document.getElementById('scenario-text');
+        text.innerHTML = 'You are observing a local coffee shop. The owner is stressed. "We have a line out the door every morning," he says, "but at the end of the month, we barely break even on rent." You sit and observe. You notice that <span class="highlight">40% of the customers buy a $3 black coffee, open their laptops, and occupy a four-person table for 6 hours while using the free WiFi.</span>';
+        
+        const result = document.getElementById('anomaly-result');
+        result.innerHTML = "Anomaly Detected: High traffic volume is decoupled from revenue generation.";
+        result.classList.remove('hidden');
+        result.classList.add('success');
+        
+        document.getElementById('phase2').classList.remove('hidden');
+    }
+
+    function checkPrinciple() {
+        const select = document.getElementById('principle-select');
+        const result = document.getElementById('principle-result');
+        if (select.value === 'correct') {
+            result.innerHTML = "Signal locked. The underlying physics have been isolated.";
+            result.className = "success";
+            document.getElementById('phase3').classList.remove('hidden');
+        } else {
+            result.innerHTML = "Noise detected. Try stripping away the surface details again.";
+            result.className = "error";
+        }
+    }
+
+    function encapsulate() {
+        const input = document.getElementById('pattern-name').value;
+        if (input.length > 2) {
+            const result = document.getElementById('encapsulate-result');
+            result.innerHTML = `Pattern [ ${input.toUpperCase()} ] saved to working memory.`;
+            result.classList.remove('hidden');
+            
+            document.getElementById('custom-name-display').innerText = `[ ${input.toUpperCase()} ]`;
+            document.getElementById('phase4').classList.remove('hidden');
+        }
+    }
+
+    function checkArbitrage() {
+        const select = document.getElementById('arbitrage-select');
+        const result = document.getElementById('arbitrage-result');
+        if (select.value === 'correct') {
+            result.innerHTML = "SYSTEM OVERRIDE COMPLETE. You have successfully executed a Level 4 Cross-Domain Arbitrage.";
+            result.className = "success";
+        } else {
+            result.innerHTML = "Arbitrage failed. The lever you pulled does not align with the core principle.";
+            result.className = "error";
+        }
+    }
+</script>
+
+</body>
+</html>
