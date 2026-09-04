@@ -28,3 +28,6 @@ It is an open-source manual for reverse-engineering learning, human behavior, st
 
 ### 04. Meta-Disciplines (Advanced Frameworks)
 * [Cybernetics](docs/04-meta-disciplines/cybernetics.md)
+
+### 05. The Simulator
+* [Play The Parsing Engine (A.P.E.X Simulator)](docs/01-the-core-engine/the-parsing-engine.html)
