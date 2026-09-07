@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Thinking App - AI Co-Product Manager</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #0d1117; color: #c9d1d9; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar layout */
+        .sidebar { width: 280px; background: #161b22; border-right: 1px solid #30363d; padding: 20px; overflow-y: auto; }
+        .sidebar h2 { color: #58a6ff; font-size: 1.2rem; margin-top: 0; }
+        .step-list { list-style: none; padding: 0; font-size: 0.9rem; color: #8b949e; }
+        .step-list li { margin-bottom: 8px; padding: 4px 8px; border-radius: 4px; }
+        .step-active { background: #238636; color: white; font-weight: bold; }
+        
+        /* Main Chat Area */
+        .main-panel { flex-grow: 1; display: flex; flex-direction: column; background: #0d1117; }
+        .chat-container { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        
+        .message { max-width: 80%; padding: 12px 16px; border-radius: 8px; line-height: 1.5; }
+        .bot-message { background: #21262d; align-self: flex-start; border: 1px solid #30363d; }
+        .user-message { background: #1f6feb; color: white; align-self: flex-end; }
+        
+        /* Input Area */
+        .input-area { padding: 20px; background: #161b22; border-top: 1px solid #30363d; display: flex; gap: 10px; }
+        input[type="text"] { flex-grow: 1; padding: 12px; border-radius: 6px; border: 1px solid #30363d; background: #0d1117; color: white; font-size: 1rem; }
+        button { background-color: #238636; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem; }
+        button:hover { background-color: #2ea043; }
+        
+        /* Setup Screen Overlay */
+        #setup-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #0d1117; display: flex; align-items: center; justify-content: center; z-index: 10; flex-direction: column; padding: 20px; text-align: center; }
+        #setup-screen input { width: 400px; max-width: 90%; margin: 20px 0; }
+        .disclaimer { color: #8b949e; font-size: 0.8rem; margin-top: 10px; max-width: 400px; }
+    </style>
+</head>
+<body>
+
+    <!-- Setup Screen -->
+    <div id="setup-screen">
+        <h1 style="color:#58a6ff;">Initialize The Thinking App</h1>
+        <p>Enter your OpenAI API Key to power your Co-Product Manager.</p>
+        <input type="password" id="api-key-input" placeholder="sk-...">
+        <button onclick="initializeEngine()">Boot Engine</button>
+        <p class="disclaimer">Your key is never stored on a server. It runs strictly locally in your browser memory using GitHub Pages.</p>
+    </div>
+
+    <!-- Sidebar Map -->
+    <div class="sidebar">
+        <h2>Discovery Flow</h2>
+        <ul class="step-list">
+            <li class="step-active">1. Product Idea</li>
+            <li>2. Business Context</li>
+            <li>3. Product Name</li>
+            <li>4. Positioning</li>
+            <li>5. User Profiles</li>
+            <li>6. Top 2 User Journeys</li>
+            <li>7. Competitor Analysis</li>
+            <li>8. Signature Experience</li>
+            <li>9. MVP Features</li>
+            <li>10. Screens</li>
+            <li>11. Data Model</li>
+            <li>12. APIs</li>
+            <li>13. AI Opportunities</li>
+            <li>14. Technology Stack</li>
+            <li>15. Final Review</li>
+            <li>16. product-specification.md</li>
+            <li>17. claude-code-prompt.md</li>
+        </ul>
+    </div>
+
+    <!-- Main Chat -->
+    <div class="main-panel">
+        <div class="chat-container" id="chat-box">
+            <!-- Messages will load here -->
+        </div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your response..." onkeypress="handleEnter(event)">
+            <button onclick="sendMessage()" id="send-btn">Send</button>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = "";
+        let messageHistory = [];
+
+        // Dev Anand's Master System Prompt
+        const systemPrompt = `You are the "AI Co-Product Manager" built on Dev Anand's Product Discovery Framework.
+Your mission is to guide the founder through structured product discovery before a single line of code is written.
+
+CORE OPERATING PHILOSOPHIES:
+- Build the right product before building the product right.
+- User profiling comes before features.
+- User journeys drive features -> Features drive screens -> Screens drive data models -> Data models drive APIs.
+- Every product must have one memorable "Signature Experience".
+- Dashboards and screens must answer business questions within 30 seconds, not just display data widgets.
+- Workflows are human conversations, not database status flags.
+
+STRICT OPERATING RULES:
+1. ASK EXACTLY ONE QUESTION AT A TIME. Never overwhelm the user with lists of questions.
+2. DO NOT WRITE CODE. If the user asks for code, decline politely and steer back to the current discovery step.
+3. CHALLENGE WEAK DIFFERENTIATORS. If an idea or value prop is generic, push back.
+4. INFER FROM CONTEXT. Extract facts first before asking obvious questions.
+
+THE 17-STEP WORKSHOP STATE MACHINE:
+Move sequentially from Step 1 (Product Idea) to Step 17 (claude-code-prompt.md generation). 
+When moving to a new step, subtly mention which step we are currently on.
+
+INITIALIZATION:
+Welcome the user, state your role as their Co-Product Manager, and ask them for Step 1: What is the raw product idea?`;
+
+        function initializeEngine() {
+            const keyInput = document.getElementById("api-key-input").value.trim();
+            if (keyInput) {
+                apiKey = keyInput;
+                document.getElementById("setup-screen").style.display = "none";
+                
+                // Initialize context
+                messageHistory.push({ role: "system", content: systemPrompt });
+                
+                // Trigger first AI response
+                fetchAIResponse();
+            } else {
+                alert("Please enter a valid API key.");
+            }
+        }
+
+        function appendMessage(role, content) {
+            const chatBox = document.getElementById("chat-box");
+            const msgDiv = document.createElement("div");
+            msgDiv.className = role === "user" ? "message user-message" : "message bot-message";
+            
+            // Basic formatting for bolding and line breaks
+            let formattedContent = content.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+            formattedContent = formattedContent.replace(/\n/g, "<br>");
+            
+            msgDiv.innerHTML = formattedContent;
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        async function fetchAIResponse() {
+            const sendBtn = document.getElementById("send-btn");
+            sendBtn.innerText = "Thinking...";
+            sendBtn.disabled = true;
+
+            try {
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + apiKey
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini", // Use GPT-4o-mini for speed and cost efficiency
+                        messages: messageHistory,
+                        temperature: 0.7
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.error) {
+                    throw new Error(data.error.message);
+                }
+
+                const botReply = data.choices[0].message.content;
+                messageHistory.push({ role: "assistant", content: botReply });
+                appendMessage("bot", botReply);
+
+            } catch (error) {
+                appendMessage("bot", "SYSTEM ERROR: " + error.message);
+            } finally {
+                sendBtn.innerText = "Send";
+                sendBtn.disabled = false;
+            }
+        }
+
+        function sendMessage() {
+            const inputField = document.getElementById("user-input");
+            const text = inputField.value.trim();
+            if (!text) return;
+
+            appendMessage("user", text);
+            messageHistory.push({ role: "user", content: text });
+            inputField.value = "";
+            
+            fetchAIResponse();
+        }
+
+        function handleEnter(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>
