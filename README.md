@@ -22,6 +22,7 @@ It is an open-source manual for reverse-engineering learning, human behavior, st
 * [Career Capital](docs/02-the-four-machines/career-capital.md)
 * [Network Architecture](docs/02-the-four-machines/network-architecture.md)
 * [Psychological Antifragility](docs/02-the-four-machines/psychological-antifragility.md)
+* [Reputation Density & Gravity](docs/02-the-four-machines/reputation-density.md)
 
 ### 03. Mental Models Library (Your Extractions)
 * [The Scientist Mode](docs/03-mental-models-library/the-scientist-mode.md)
