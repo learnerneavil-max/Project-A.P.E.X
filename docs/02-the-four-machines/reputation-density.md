@@ -17,7 +17,9 @@ Here is the exact algorithmic blueprint for building a high-gravity personal net
 
 Before you build a network, you must filter your focus. 
 
-Most people experience their career in the "time domain"—a chaotic, overlapping mess of tasks, goals, and interests. To fix this, you must run a **Cognitive Fourier Transform**:
+Most people experience their career in the "time domain"—a chaotic, overlapping mess of tasks, goals, and interests. To fix this, you must run a 
+
+**Cognitive Fourier Transform**:
 **S(f) = ∫ s(t) · e^(-i2πft) dt**
 
 You decompose the chaotic noise of daily life into pure, isolated frequencies. 
