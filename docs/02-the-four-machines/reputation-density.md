@@ -18,7 +18,7 @@ Here is the exact algorithmic blueprint for building a high-gravity personal net
 Before you build a network, you must filter your focus. 
 
 Most people experience their career in the "time domain"—a chaotic, overlapping mess of tasks, goals, and interests. To fix this, you must run a **Cognitive Fourier Transform**:
-$$ <img src="https://latex.codecogs.com/svg.image?\color{white}S(f)=\int_{-\infty}^{\infty}s(t)\cdot&space;e^{-i2\pi&space;ft}dt" alt="Fourier Transform" />
+**S(f) = ∫ s(t) · e^(-i2πft) dt**
 
 You decompose the chaotic noise of daily life into pure, isolated frequencies. 
 * **The Noise:** Being "the guy who knows AI, cybersecurity, IoT, web dev, and blockchain." (Low amplitude, high frequency).
