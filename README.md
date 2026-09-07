@@ -32,3 +32,6 @@ It is an open-source manual for reverse-engineering learning, human behavior, st
 
 ### 05. The Simulator
 * [Play The Parsing Engine (A.P.E.X Simulator)](docs/01-the-core-engine/the-parsing-engine.html)
+
+### 06. Developer Sandbox
+* [Launch The Thinking App (AI Co-Product Manager)](docs/02-the-four-machines/the-thinking-app.html)
